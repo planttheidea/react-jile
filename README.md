@@ -1,6 +1,6 @@
 # react-jile
 
-Manage your React component styles with jile automagically
+Create scoped React component styles with jile automagically
 
 #### Table of contents
 * [Installation](#installation)
