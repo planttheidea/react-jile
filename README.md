@@ -2,6 +2,13 @@
 
 Manage your React component styles with jile automagically
 
+#### Table of contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [How it works](#how-it-works)
+* [Advanced usage](#advanced-usage)
+* [Development](#development)
+
 #### Installation
 
 ```
