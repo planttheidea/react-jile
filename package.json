@@ -78,7 +78,7 @@
     "clean": "rimraf lib && rimraf dist",
     "dev": "NODE_ENV=development webpack-dashboard -- webpack-dev-server --config=webpack.config.dev.js",
     "lint": "NODE_ENV=test eslint src",
-    "prepublish": "in-publish && prepublish:compile || in-install",
+    "prepublish": "in-publish && npm run prepublish:compile || in-install",
     "prepublish:compile": "npm run clean && npm run lint && npm test && npm run transpile && npm run build && npm run build:minified",
     "start": "npm run dev",
     "test": "NODE_PATH=. NODE_ENV=test ava",
