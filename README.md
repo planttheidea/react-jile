@@ -37,7 +37,7 @@ class Foo extends React.Component {
   }
 }
 
-const Bar = ({selectors]) => {
+const Bar = ({selectors}) => {
   return (
     <div className={selectors.foo}>
       I have red-colored font!
@@ -104,7 +104,7 @@ const getStyles = (props) => {
 
 @jile(getStyles)
 class Page extends React.Component {
-  render() [
+  render() {
     const {
       children,
       selectors
@@ -119,7 +119,7 @@ class Page extends React.Component {
 }
 ```
 
-The caveat here is that these styles are *not instance-specific*, meaning on a reusable component there will only be a single stylesheet created. This will be remedied in a future release.
+The caveat here is that by using this function, the styles are *instance-specific*, meaning every instance of the component will create a new unique style tag.
 
 #### Development
 

@@ -35,11 +35,12 @@ const createMetaJile = (Component, styles, options) => {
  * get the MetaJile stored in cache for that specific component
  *
  * @param {React.Component} Component
+ * @param {string} id
  * @returns {MetaJile}
  */
-const getCachedJile = (Component) => {
-  const cachedComponentJile = find(cache, ({component}) => {
-    return component === Component;
+const getCachedJile = (Component, id) => {
+  const cachedComponentJile = find(cache, ({component, options}) => {
+    return component === Component && options.id === id;
   });
 
   return cachedComponentJile || null;
@@ -64,10 +65,17 @@ const getCleanOptions = (options, id) => {
  * get the id used for the jile stylesheet
  *
  * @param {string} id
+ * @param {string} instanceId
  * @returns {string}
  */
-const getJileId = ({id} = {}) => {
-  return id || `jile_${uuid.v4()}`;
+const getJileId = ({id} = {}, instanceId) => {
+  const baseId = id || `jile_${uuid.v4()}`;
+
+  if (!instanceId) {
+    return baseId;
+  }
+
+  return `${baseId}_${instanceId}`;
 };
 
 /**
@@ -76,16 +84,17 @@ const getJileId = ({id} = {}) => {
  * @param {Component} Component
  * @param {Object} styles
  * @param {Options} passedOptions
+ * @param {string} instanceId
  * @returns {MetaJile}
  */
-const getMetaJile = (Component, styles, passedOptions) => {
-  const cachedComponentJile = getCachedJile(Component);
+const getMetaJile = (Component, styles, passedOptions, instanceId) => {
+  const id = getJileId(passedOptions, instanceId);
+  const cachedComponentJile = getCachedJile(Component, id);
 
   if (cachedComponentJile) {
     return cachedComponentJile;
   }
 
-  const id = getJileId(passedOptions);
   const options = getCleanOptions(passedOptions, id);
 
   cache[id] = createMetaJile(Component, styles, options);

@@ -63,18 +63,19 @@ test('if getCachedJile will retrieve the item in cache if it matches, else retur
       display: 'block'
     }
   };
+  const id = 'foo';
   const options = {
     autoMount: false,
-    id: 'foo'
+    id
   };
 
   const j = getMetaJile(Foo, styles, options);
 
-  const nullResult = getCachedJile('foo');
+  const nullResult = getCachedJile({});
 
   t.is(nullResult, null);
 
-  const matchingResult = getCachedJile(Foo);
+  const matchingResult = getCachedJile(Foo, id);
 
   t.is(matchingResult, j);
 });

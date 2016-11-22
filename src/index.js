@@ -1,6 +1,7 @@
 // external dependencies
 import isFunction from 'lodash/isFunction';
 import isPlainObject from 'lodash/isPlainObject';
+import uuid from 'node-uuid';
 import React, {
   Component
 } from 'react';
@@ -32,18 +33,18 @@ import {
  * @returns {function(PassedComponent: Component): Component}
  */
 const decorateWithJile = (passedStyles, passedOptions = {}) => {
-  const isStylesFunction = isFunction(passedStyles);
+  const isInstanceSpecific = isFunction(passedStyles);
 
-  if (!isStylesFunction && !isPlainObject(passedStyles)) {
+  if (!isInstanceSpecific && !isPlainObject(passedStyles)) {
     throw new TypeError('The passed styles must either be a plain object of styles or a function '
       + 'that returns a plain object of styles.');
   }
 
-  let cachedJile,
-      jileInstance;
+  let cachedJile = null,
+      jileInstance = null;
 
   return (PassedComponent) => {
-    if (!isStylesFunction) {
+    if (!isInstanceSpecific) {
       cachedJile = getMetaJile(PassedComponent, passedStyles, passedOptions);
       jileInstance = cachedJile.jile;
     }
@@ -52,36 +53,49 @@ const decorateWithJile = (passedStyles, passedOptions = {}) => {
       constructor(...args) {
         super(...args);
 
-        if (isStylesFunction) {
-          let styles = getStylesFromProps(passedStyles, this.props);
-
-          cachedJile = getMetaJile(PassedComponent, styles, passedOptions);
-          jileInstance = cachedJile.jile;
-
-          this.componentWillReceiveProps = function(nextProps) {
-            styles = getStylesFromProps(passedStyles, nextProps);
-            cachedJile = updateMetaJile(styles, cachedJile);
-            jileInstance = cachedJile.jile;
-          };
+        if (isInstanceSpecific) {
+          this.addInstanceSpecificSetup();
         }
 
-        if (++cachedJile.counter === 1) {
-          jileInstance.add();
+        if (++this.cachedJile.counter === 1) {
+          this.jileInstance.add();
         }
       }
 
       componentWillUnmount() {
-        if (--cachedJile.counter === 0) {
-          jileInstance.remove();
+        if (--this.cachedJile.counter === 0) {
+          this.jileInstance.remove();
         }
       }
+
+      cachedJile = cachedJile;
+      id = null;
+      jileInstance = jileInstance;
+
+      /**
+       * add the instance-specific values and update on props method
+       */
+      addInstanceSpecificSetup = () => {
+        const initialStyles = getStylesFromProps(passedStyles, this.props);
+
+        this.id = uuid.v4();
+        this.cachedJile = getMetaJile(PassedComponent, initialStyles, passedOptions, this.id);
+        this.jileInstance = this.cachedJile.jile;
+
+        this.componentWillReceiveProps = function(nextProps) {
+          const updatedStyles = getStylesFromProps(passedStyles, nextProps);
+
+          this.cachedJile = updateMetaJile(updatedStyles, this.cachedJile);
+          this.jileInstance = this.cachedJile.jile;
+        };
+      };
 
       render() {        
         return (
           <PassedComponent
             {...this.props}
-            jile={jileInstance}
-            selectors={jileInstance.selectors}
+            jile={this.jileInstance}
+            selectors={this.jileInstance.selectors}
           />
         );
       }

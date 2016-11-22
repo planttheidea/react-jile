@@ -30,8 +30,6 @@ class Div extends Component {
       selectors
     } = this.props;
 
-    console.log(this.props);
-
     return (
       <div className={selectors.foo}>
         {children}
@@ -83,7 +81,13 @@ class App extends Component {
           </Div>
         )}
 
-        <Section renderCount={renderCount}>
+        {renderCount !== 0 && (
+          <Section renderCount={renderCount}>
+            Section
+          </Section>
+        )}
+
+        <Section renderCount={renderCount + 1}>
           Section
         </Section>
       </main>
