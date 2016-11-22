@@ -58,7 +58,7 @@ const JiledBar = jile(styles)(Bar);
 
 #### How it works
 
-Most of the magic is handled internally by [`jile`](https://github.com/planttheidea/jile), which will automatically parse, prefix, and inject the styles object you pass into the document head, allowing full CSS capabilities written in pure JS. This component merely provides a convenient decorator to use on React components, and also manages the style tag for you (no duplicate injections, auto addition / removal from DOM when all instances of the component are mounted / unmounted, etc.). In a majority of cases all you will need are the `selectors`, which are the scoped selectors created by the `jile` process, which are available on props. Additionally available on props is the full `jile` instance, which will likely not be used but in case you want it ... there ya go.
+Most of the magic is handled internally by [`jile`](https://github.com/planttheidea/jile), which will automatically parse, prefix, and inject the styles object you pass into the document head, allowing the full power of CSS written in pure JS. `react-jile` merely provides a convenient decorator to use on React components, and also manages the style tag for you (no duplicate injections, auto addition / removal from DOM when all instances of the component are mounted / unmounted, etc.). In a majority of cases all you will need are the `selectors`, which are the scoped selectors created by the `jile` process, and are available on props. Also available on props is the full `jile` instance, which will likely not be used but there in case you want to get crazy with your application of `jile`.
 
 #### Advanced usage
 
@@ -126,7 +126,7 @@ class Page extends React.Component {
 }
 ```
 
-The caveat here is that by using this function, the styles are *instance-specific*, meaning every instance of the component will create a new unique style tag.
+The caveat here is that by using this function, the styles are *instance-specific*, meaning every instance of the component will create a unique style tag that will be independently mounted / updated / unmounted in the DOM.
 
 #### Development
 
