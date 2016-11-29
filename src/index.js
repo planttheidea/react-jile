@@ -1,7 +1,7 @@
 // external dependencies
 import isFunction from 'lodash/isFunction';
 import isPlainObject from 'lodash/isPlainObject';
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 import React, {
   Component
 } from 'react';

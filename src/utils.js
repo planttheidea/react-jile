@@ -2,7 +2,7 @@
 import find from 'lodash/find';
 import isPlainObject from 'lodash/isPlainObject';
 import jile from 'jile';
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 
 let cache = {};
 
