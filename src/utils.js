@@ -2,7 +2,7 @@
 import find from 'lodash/find';
 import isPlainObject from 'lodash/isPlainObject';
 import jile from 'jile';
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 
 let cache = {};
 
@@ -69,7 +69,7 @@ const getCleanOptions = (options, id) => {
  * @returns {string}
  */
 const getJileId = ({id} = {}, instanceId) => {
-  const baseId = id || `jile_${uuid.v4()}`;
+  const baseId = id || `jile_${uuid()}`;
 
   if (!instanceId) {
     return baseId;

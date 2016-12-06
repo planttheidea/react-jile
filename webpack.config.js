@@ -26,12 +26,6 @@ module.exports = {
       commonjs2: 'jile',
       root: 'jile'
     },
-    'node-uuid': {
-      amd: 'node-uuid',
-      commonjs: 'node-uuid',
-      commonjs2: 'node-uuid',
-      root: 'uuid'
-    },
     'react': {
       amd: 'react',
       commonjs: 'react',

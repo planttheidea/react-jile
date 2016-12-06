@@ -22,8 +22,8 @@
   "dependencies": {
     "jile": "^2.0.2",
     "lodash": "^4.17.2",
-    "node-uuid": "^1.4.7",
-    "react": "^15.4.0"
+    "react": "^15.4.1",
+    "uuid": "^3.0.1"
   },
   "description": "Decorator for jile usage on React components",
   "devDependencies": {
@@ -38,7 +38,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-2": "^6.18.0",
     "enzyme": "^2.6.0",
-    "eslint": "^3.10.2",
+    "eslint": "^3.11.1",
     "eslint-config-rapid7": "^2.6.0",
     "eslint-friendly-formatter": "^2.0.6",
     "eslint-loader": "^1.6.1",
@@ -47,11 +47,11 @@
     "jsdom": "^9.8.3",
     "jsdom-global": "^2.1.0",
     "lodash-webpack-plugin": "^0.10.6",
-    "nyc": "^9.0.1",
-    "onchange": "^3.0.2",
+    "nyc": "^10.0.0",
+    "onchange": "^3.2.0",
     "optimize-js-plugin": "^0.0.4",
-    "react-addons-test-utils": "^15.4.0",
-    "react-dom": "^15.4.0",
+    "react-addons-test-utils": "^15.4.1",
+    "react-dom": "^15.4.1",
     "rimraf": "^2.5.4",
     "sinon": "^1.17.6",
     "webpack": "^1.13.3",
@@ -78,12 +78,12 @@
     "clean": "rimraf lib && rimraf dist",
     "dev": "NODE_ENV=development webpack-dashboard -- webpack-dev-server --config=webpack.config.dev.js",
     "lint": "NODE_ENV=test eslint src",
-    "prepublish": "in-publish && npm run prepublish:compile || in-install",
+    "prepublish": "in-publish && npm run prepublish:compile || echo ''",
     "prepublish:compile": "npm run clean && npm run lint && npm test && npm run transpile && npm run build && npm run build:minified",
     "start": "npm run dev",
     "test": "NODE_PATH=. NODE_ENV=test ava",
     "test:watch": "NODE_PATH=. NODE_ENV=test ava --watch",
     "transpile": "babel src --out-dir lib"
   },
-  "version": "1.0.1"
+  "version": "1.0.2"
 }

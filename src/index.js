@@ -1,7 +1,7 @@
 // external dependencies
 import isFunction from 'lodash/isFunction';
 import isPlainObject from 'lodash/isPlainObject';
-import uuid from 'node-uuid';
+import uuid from 'uuid/v4';
 import React, {
   Component
 } from 'react';
@@ -78,7 +78,7 @@ const decorateWithJile = (passedStyles, passedOptions = {}) => {
       addInstanceSpecificSetup = () => {
         const initialStyles = getStylesFromProps(passedStyles, this.props);
 
-        this.id = uuid.v4();
+        this.id = uuid();
         this.cachedJile = getMetaJile(PassedComponent, initialStyles, passedOptions, this.id);
         this.jileInstance = this.cachedJile.jile;
 
