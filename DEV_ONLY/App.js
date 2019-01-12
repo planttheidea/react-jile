@@ -1,40 +1,28 @@
-import React, {
-  Component,
-  PropTypes
-} from 'react';
-import {
-  render
-} from 'react-dom';
+import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import {render} from 'react-dom';
 
 import jile from '../src';
 
 const styles = {
+  '.foo': {
+    color: 'red',
+  },
   'html, body': {
     margin: 0,
-    padding: 0
+    padding: 0,
   },
-  '.foo': {
-    color: 'red'
-  }
 };
 
-@jile(styles)
 class Div extends Component {
   static propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   render() {
-    const {
-      children,
-      selectors
-    } = this.props;
+    const {children, selectors} = this.props;
 
-    return (
-      <div className={selectors.foo}>
-        {children}
-      </div>
-    )
+    return <div className={selectors.foo}>{children}</div>;
   }
 }
 
@@ -43,53 +31,31 @@ const getSectionStyles = ({renderCount}) => {
 
   return {
     '.foo': {
-      color
-    }
+      color,
+    },
   };
 };
 
-const UnwrappedSection = ({children, selectors}) => {
-  return (
-    <section className={selectors.foo}>
-      {children}
-    </section>
-  );
-};
+const StyledDiv = jile(styles)(Div);
+
+const UnwrappedSection = ({children, selectors}) => <section className={selectors.foo}>{children}</section>;
 const Section = jile(getSectionStyles)(UnwrappedSection);
 
 class App extends Component {
   render() {
-    const {
-      renderCount
-    } = this.props;
+    const {renderCount} = this.props;
 
     return (
       <main>
-        <h1>
-          App
-        </h1>
+        <h1>App</h1>
 
-        {renderCount > 0 && (
-          <Div>
-            First div
-          </Div>
-        )}
+        {renderCount > 0 && <StyledDiv>First div</StyledDiv>}
 
-        {renderCount > 1 && (
-          <Div>
-            Second div
-          </Div>
-        )}
+        {renderCount > 1 && <StyledDiv>Second div</StyledDiv>}
 
-        {renderCount !== 0 && (
-          <Section renderCount={renderCount}>
-            Section
-          </Section>
-        )}
+        {renderCount !== 0 && <Section renderCount={renderCount}>Section</Section>}
 
-        <Section renderCount={renderCount + 1}>
-          Section
-        </Section>
+        <Section renderCount={renderCount + 1}>Section</Section>
       </main>
     );
   }
@@ -97,32 +63,22 @@ class App extends Component {
 
 const div = document.createElement('div');
 
-render((
-  <App renderCount={2}/>
-), div);
+render(<App renderCount={2} />, div);
 
 setTimeout(() => {
-  render((
-    <App renderCount={1}/>
-  ), div);
+  render(<App renderCount={1} />, div);
 }, 5000);
 
 setTimeout(() => {
-  render((
-    <App renderCount={0}/>
-  ), div);
+  render(<App renderCount={0} />, div);
 }, 10000);
 
 setTimeout(() => {
-  render((
-    <App renderCount={1}/>
-  ), div);
+  render(<App renderCount={1} />, div);
 }, 15000);
 
 setTimeout(() => {
-  render((
-    <App renderCount={2}/>
-  ), div);
+  render(<App renderCount={2} />, div);
 }, 20000);
 
 document.body.appendChild(div);

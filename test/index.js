@@ -1,7 +1,5 @@
 import test from 'ava';
-import {
-  mount
-} from 'enzyme';
+import {mount} from 'enzyme';
 import React from 'react';
 import isFunction from 'lodash/isFunction';
 
@@ -23,14 +21,10 @@ test('if jile decorator returns a function', (t) => {
 
 test('if jile decorator throws an error when the value passed to its return function is not a react component', (t) => {
   const styles = {
-    display: 'block'
+    display: 'block',
   };
   const decorator = jile(styles);
-  const FunctionFoo = () => {
-    return (
-      <div/>
-    );
-  };
+  const FunctionFoo = () => <div />;
 
   const functionResult = decorator(FunctionFoo);
 
@@ -38,9 +32,7 @@ test('if jile decorator throws an error when the value passed to its return func
 
   class ClassFoo extends React.Component {
     render() {
-      return (
-        <div/>
-      );
+      return <div />;
     }
   }
 
@@ -51,14 +43,10 @@ test('if jile decorator throws an error when the value passed to its return func
 
 test('if jile decorator returns a react component when called', (t) => {
   const styles = {
-    display: 'block'
+    display: 'block',
   };
   const decorator = jile(styles);
-  const FunctionFoo = () => {
-    return (
-      <div/>
-    );
-  };
+  const FunctionFoo = () => <div />;
 
   const functionResult = decorator(FunctionFoo);
 
@@ -66,9 +54,7 @@ test('if jile decorator returns a react component when called', (t) => {
 
   class ClassFoo extends React.Component {
     render() {
-      return (
-        <div/>
-      );
+      return <div />;
     }
   }
 
@@ -77,54 +63,50 @@ test('if jile decorator returns a react component when called', (t) => {
   t.is(Object.getPrototypeOf(classResult), React.Component);
 });
 
-test('if component made from jile decorator has a constructor and a componentWillUnmount method but not '
-    + 'a componentWillReceiveProps method if a plain object is passed', (t) => {
-  const Foo = () => {
-    return (
-      <div/>
-    );
-  };
-  const styles = {
-    '.foo': {
-      display: 'block'
-    }
-  };
-  const options = {
-    autoMount: false,
-    id: 'foo'
-  };
-
-  const JileComponent = jile(styles, options)(Foo);
-  const wrapper = mount(<JileComponent/>);
-
-  t.not(wrapper.instance().constructor, undefined);
-  t.is(wrapper.instance().componentWillReceiveProps, undefined);
-  t.not(wrapper.instance().componentWillUnmount, undefined);
-});
-
-test('if component made from jile decorator has a constructor, a componentWillUnmount method, and '
-    + 'a componentWillReceiveProps method if a function is passed', (t) => {
-  const Foo = () => {
-    return (
-      <div/>
-    );
-  };
-  const styles = () => {
-    return {
+test(
+  'if component made from jile decorator has a constructor and a componentWillUnmount method but not ' +
+    'a componentWillReceiveProps method if a plain object is passed',
+  (t) => {
+    const Foo = () => <div />;
+    const styles = {
       '.foo': {
-        display: 'block'
-      }
+        display: 'block',
+      },
     };
-  };
-  const options = {
-    autoMount: false,
-    id: 'foo'
-  };
+    const options = {
+      autoMount: false,
+      id: 'foo',
+    };
 
-  const JileComponent = jile(styles, options)(Foo);
-  const wrapper = mount(<JileComponent/>);
+    const JileComponent = jile(styles, options)(Foo);
+    const wrapper = mount(<JileComponent />);
 
-  t.not(wrapper.instance().constructor, undefined);
-  t.not(wrapper.instance().componentWillReceiveProps, undefined);
-  t.not(wrapper.instance().componentWillUnmount, undefined);
-});
+    t.not(wrapper.instance().constructor, undefined);
+    t.is(wrapper.instance().componentWillReceiveProps, undefined);
+    t.not(wrapper.instance().componentWillUnmount, undefined);
+  }
+);
+
+test(
+  'if component made from jile decorator has a constructor, a componentWillUnmount method, and ' +
+    'a componentWillReceiveProps method if a function is passed',
+  (t) => {
+    const Foo = () => <div />;
+    const styles = () => ({
+      '.foo': {
+        display: 'block',
+      },
+    });
+    const options = {
+      autoMount: false,
+      id: 'foo',
+    };
+
+    const JileComponent = jile(styles, options)(Foo);
+    const wrapper = mount(<JileComponent />);
+
+    t.not(wrapper.instance().constructor, undefined);
+    t.not(wrapper.instance().componentWillReceiveProps, undefined);
+    t.not(wrapper.instance().componentWillUnmount, undefined);
+  }
+);

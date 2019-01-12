@@ -1,16 +1,13 @@
 // external dependencies
-import isFunction from 'lodash/isFunction';
 import isPlainObject from 'lodash/isPlainObject';
+import React, {Component} from 'react';
 import uuid from 'uuid/v4';
-import React, {
-  Component
-} from 'react';
 
 // utils
 import {
   getMetaJile,
   getStylesFromProps,
-  updateMetaJile
+  updateMetaJile,
 } from './utils';
 
 /**
@@ -33,11 +30,13 @@ import {
  * @returns {function(PassedComponent: Component): Component}
  */
 const decorateWithJile = (passedStyles, passedOptions = {}) => {
-  const isInstanceSpecific = isFunction(passedStyles);
+  const isInstanceSpecific = typeof passedStyles === 'function';
 
   if (!isInstanceSpecific && !isPlainObject(passedStyles)) {
-    throw new TypeError('The passed styles must either be a plain object of styles or a function '
-      + 'that returns a plain object of styles.');
+    throw new TypeError(
+      'The passed styles must either be a plain object of styles or a function ' +
+        'that returns a plain object of styles.'
+    );
   }
 
   let cachedJile = null,
@@ -49,7 +48,11 @@ const decorateWithJile = (passedStyles, passedOptions = {}) => {
       jileInstance = cachedJile.jile;
     }
 
-    class JileComponent extends Component {
+    const displayName = PassedComponent.displayName || PassedComponent.name || 'Component';
+
+    return class JileComponent extends Component {
+      static displayName = `Jiled(${displayName})`;
+
       constructor(...args) {
         super(...args);
 
@@ -90,8 +93,9 @@ const decorateWithJile = (passedStyles, passedOptions = {}) => {
         };
       };
 
-      render() {        
+      render() {
         return (
+          // eslint workaround
           <PassedComponent
             {...this.props}
             jile={this.jileInstance}
@@ -99,9 +103,7 @@ const decorateWithJile = (passedStyles, passedOptions = {}) => {
           />
         );
       }
-    }
-
-    return JileComponent;
+    };
   };
 };
 

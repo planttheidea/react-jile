@@ -1,8 +1,6 @@
 import test from 'ava';
 import React from 'react';
-import {
-  Jile
-} from 'jile/lib/Jile';
+import {Jile} from 'jile/lib/Jile';
 
 import {
   createMetaJile,
@@ -11,15 +9,10 @@ import {
   getJileId,
   getMetaJile,
   getStylesFromProps,
-  updateMetaJile
+  updateMetaJile,
 } from 'src/utils';
 
-const META_JILE_KEYS = [
-  'component',
-  'counter',
-  'jile',
-  'options'
-];
+const META_JILE_KEYS = ['component', 'counter', 'jile', 'options'];
 
 const UUID_REGEXP = /jile_[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i;
 
@@ -29,8 +22,8 @@ test('if createMetaJile creates the property jile object', (t) => {
   const component = 'foo';
   const styles = {
     '.foo': {
-      display: 'block'
-    }
+      display: 'block',
+    },
   };
   const options = {};
 
@@ -38,7 +31,7 @@ test('if createMetaJile creates the property jile object', (t) => {
   const expectedResultMinusJile = {
     component,
     counter: 0,
-    options
+    options,
   };
 
   t.deepEqual(Object.keys(result), META_JILE_KEYS);
@@ -53,20 +46,16 @@ test('if createMetaJile creates the property jile object', (t) => {
 });
 
 test('if getCachedJile will retrieve the item in cache if it matches, else return null', (t) => {
-  const Foo = () => {
-    return (
-      <div/>
-    );
-  };
+  const Foo = () => <div />;
   const styles = {
     '.foo': {
-      display: 'block'
-    }
+      display: 'block',
+    },
   };
   const id = 'foo';
   const options = {
     autoMount: false,
-    id
+    id,
   };
 
   const j = getMetaJile(Foo, styles, options);
@@ -83,13 +72,13 @@ test('if getCachedJile will retrieve the item in cache if it matches, else retur
 test('if getCleanOptions returns a shallow clone of the object passed, with overrides for id and autoMount', (t) => {
   const id = 'bar';
   const foo = {
-    foo: 'foo'
+    foo: 'foo',
   };
 
   const expectedResult = {
     ...foo,
     autoMount: false,
-    id
+    id,
   };
   const result = getCleanOptions(foo, id);
 
@@ -99,7 +88,7 @@ test('if getCleanOptions returns a shallow clone of the object passed, with over
 test('if getJileId returns the parameter when passed one', (t) => {
   const id = 'foo';
   const result = getJileId({
-    id
+    id,
   });
 
   t.is(result, id);
@@ -112,19 +101,15 @@ test('if getJileId returns a generated ID when not passed on', (t) => {
 });
 
 test('if getMetaJile returns the correct metadata object', (t) => {
-  const Foo = () => {
-    return (
-      <div/>
-    );
-  };
+  const Foo = () => <div />;
   const styles = {
     '.foo': {
-      display: 'block'
-    }
+      display: 'block',
+    },
   };
   const options = {
     autoMount: false,
-    id: 'foo'
+    id: 'foo',
   };
 
   const j = getMetaJile(Foo, styles, options);
@@ -137,11 +122,9 @@ test('if getMetaJile returns the correct metadata object', (t) => {
 });
 
 test('if getStylesFromProps returns the result of the fn passed to it', (t) => {
-  const fn = (foo) => {
-    return foo;
-  };
+  const fn = (foo) => foo;
   const bar = {
-    bar: 'bar'
+    bar: 'bar',
   };
 
   const result = getStylesFromProps(fn, bar);
@@ -150,11 +133,9 @@ test('if getStylesFromProps returns the result of the fn passed to it', (t) => {
 });
 
 test('if getStylesFromProps throws when the result of the call is not a plain object', (t) => {
-  const fn = () => {
-    return 'foo';
-  };
+  const fn = () => 'foo';
   const bar = {
-    bar: 'bar'
+    bar: 'bar',
   };
 
   t.throws(() => {
@@ -163,27 +144,23 @@ test('if getStylesFromProps throws when the result of the call is not a plain ob
 });
 
 test('if updateMetaJile updates the cached MetaJile', (t) => {
-  const Foo = () => {
-    return (
-      <div/>
-    );
-  };
+  const Foo = () => <div />;
   const styles = {
     '.foo': {
-      display: 'block'
-    }
+      display: 'block',
+    },
   };
   const options = {
     autoMount: false,
-    id: 'foo'
+    id: 'foo',
   };
 
   const j = getMetaJile(Foo, styles, options);
 
   const newStyles = {
     '.foo': {
-      display: 'inline-block'
-    }
+      display: 'inline-block',
+    },
   };
 
   const result = updateMetaJile(newStyles, j);

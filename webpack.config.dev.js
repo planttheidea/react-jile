@@ -1,80 +1,34 @@
 'use strict';
 
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WebpackDashboard = require('webpack-dashboard/plugin');
 
 const defaultConfig = require('./webpack.config');
 
 const PORT = 3000;
 
-const preLoaders = defaultConfig.module.preLoaders.map((preLoader) => {
-  return Object.assign({}, preLoader, {
-    cacheable: true
-  });
-});
-
-const loaders = defaultConfig.module.loaders.map((loader) => {
-  if (loader.loader === 'babel') {
-    return Object.assign({}, loader, {
-      cacheable: true,
-      include: [
-        /src/,
-        /DEV_ONLY/
-      ],
-      query: {
-        plugins: [
-          'transform-decorators-legacy'
-        ]
-      }
-    });
-  }
-
-  return Object.assign({}, loader, {
-    cacheable: true
-  });
-});
-
 module.exports = Object.assign({}, defaultConfig, {
-  cache: true,
-
-  devServer : {
+  devServer: {
     contentBase: './dist',
     host: 'localhost',
     inline: true,
     lazy: false,
     noInfo: false,
-    quiet: false,
     port: PORT,
+    quiet: false,
     stats: {
       colors: true,
-      progress: true
-    }
+      progress: true,
+    },
   },
 
-  entry: [
-    path.resolve (__dirname, 'DEV_ONLY', 'App.js')
-  ],
+  entry: [path.resolve(__dirname, 'DEV_ONLY', 'App.js')],
 
-  eslint: Object.assign({}, defaultConfig.eslint, {
-    failOnWarning: false
-  }),
-
-  externals: null,
-
-  module: {
-    preLoaders,
-    loaders
-  },
+  externals: undefined,
 
   output: Object.assign({}, defaultConfig.output, {
-    publicPath: `http://localhost:${PORT}/`
+    publicPath: `http://localhost:${PORT}/`,
   }),
 
-  plugins: [
-    ...defaultConfig.plugins,
-    new HtmlWebpackPlugin(),
-    new WebpackDashboard()
-  ]
+  plugins: [...defaultConfig.plugins, new HtmlWebpackPlugin()],
 });
