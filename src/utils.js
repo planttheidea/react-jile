@@ -22,14 +22,12 @@ let cache = {};
  * @param {Options} options
  * @returns {MetaJile}
  */
-const createMetaJile = (Component, styles, options) => {
-  return {
-    component: Component,
-    counter: 0,
-    jile: jile(styles, options),
-    options
-  };
-};
+export const createMetaJile = (Component, styles, options) => ({
+  component: Component,
+  counter: 0,
+  jile: jile(styles, options),
+  options,
+});
 
 /**
  * get the MetaJile stored in cache for that specific component
@@ -38,13 +36,8 @@ const createMetaJile = (Component, styles, options) => {
  * @param {string} id
  * @returns {MetaJile}
  */
-const getCachedJile = (Component, id) => {
-  const cachedComponentJile = find(cache, ({component, options}) => {
-    return component === Component && options.id === id;
-  });
-
-  return cachedComponentJile || null;
-};
+export const getCachedJile = (Component, id) =>
+  find(cache, ({component, options}) => component === Component && options.id === id) || null;
 
 /**
  * get the options with the additional parameters
@@ -53,13 +46,11 @@ const getCachedJile = (Component, id) => {
  * @param {string} id
  * @returns {Options}
  */
-const getCleanOptions = (options, id) => {
-  return {
-    ...options,
-    autoMount: false,
-    id
-  };
-};
+export const getCleanOptions = (options, id) => ({
+  ...options,
+  autoMount: false,
+  id,
+});
 
 /**
  * get the id used for the jile stylesheet
@@ -68,14 +59,10 @@ const getCleanOptions = (options, id) => {
  * @param {string} instanceId
  * @returns {string}
  */
-const getJileId = ({id} = {}, instanceId) => {
+export const getJileId = ({id} = {}, instanceId) => {
   const baseId = id || `jile_${uuid()}`;
 
-  if (!instanceId) {
-    return baseId;
-  }
-
-  return `${baseId}_${instanceId}`;
+  return instanceId ? `${baseId}_${instanceId}` : baseId;
 };
 
 /**
@@ -87,7 +74,7 @@ const getJileId = ({id} = {}, instanceId) => {
  * @param {string} instanceId
  * @returns {MetaJile}
  */
-const getMetaJile = (Component, styles, passedOptions, instanceId) => {
+export const getMetaJile = (Component, styles, passedOptions, instanceId) => {
   const id = getJileId(passedOptions, instanceId);
   const cachedComponentJile = getCachedJile(Component, id);
 
@@ -95,11 +82,7 @@ const getMetaJile = (Component, styles, passedOptions, instanceId) => {
     return cachedComponentJile;
   }
 
-  const options = getCleanOptions(passedOptions, id);
-
-  cache[id] = createMetaJile(Component, styles, options);
-
-  return cache[id];
+  return (cache[id] = createMetaJile(Component, styles, getCleanOptions(passedOptions, id)));
 };
 
 /**
@@ -109,12 +92,11 @@ const getMetaJile = (Component, styles, passedOptions, instanceId) => {
  * @param {Object} props
  * @returns {Object}
  */
-const getStylesFromProps = (fn, props) => {
+export const getStylesFromProps = (fn, props) => {
   const computedStyles = fn(props);
 
   if (!isPlainObject(computedStyles)) {
-    throw new TypeError('Result of styles method does not return a plain object, reverting to ' +
-      'original styles passed.');
+    throw new TypeError('Result of styles method does not return a plain object, reverting to original styles passed.');
   }
 
   return computedStyles;
@@ -127,24 +109,11 @@ const getStylesFromProps = (fn, props) => {
  * @param {MetaJile} cacheObject
  * @returns {MetaJile}
  */
-const updateMetaJile = (styles, cacheObject) => {
-  const options = cacheObject.options;
-  const id = options.id;
+export const updateMetaJile = (styles, cacheObject) => {
+  const {options} = cacheObject;
 
-  const updatedJile = jile(styles, options);
-
-  cache[id] = {
+  return (cache[options.id] = {
     ...cacheObject,
-    jile: updatedJile
-  };
-
-  return cache[id];
+    jile: jile(styles, options),
+  });
 };
-
-export {createMetaJile};
-export {getCachedJile};
-export {getCleanOptions};
-export {getJileId};
-export {getMetaJile};
-export {getStylesFromProps};
-export {updateMetaJile};

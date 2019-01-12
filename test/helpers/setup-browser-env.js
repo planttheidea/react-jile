@@ -1,8 +1,9 @@
-const jsdom = require('jsdom').jsdom;
-const jsdomGlobal = require('jsdom-global');
+import browserEnv from 'browser-env';
+import enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
-global.document = jsdom('<html></html>');
-global.window = document.defaultView;
-global.navigator = window.navigator;
+browserEnv();
 
-jsdomGlobal();
+enzyme.configure({
+  adapter: new Adapter(),
+});
